@@ -29,7 +29,7 @@ async def preserve_image(url, ameblo_id, target_date, index):
     resp = await aiohttp.request('GET', url)
     data = await resp.read()
     resp.close()
-    with open("./{0}/ogura_{1}_{2:03d}.{3}"
+    with open("./{0}/{0}_{1}_{2:03d}.{3}"
               .format(ameblo_id, target_date, index, url[-3::]), "wb") \
             as f:
         f.write(data)
