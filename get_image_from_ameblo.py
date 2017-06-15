@@ -15,13 +15,18 @@ async def get_page(ameblo_id, target_date):
     res.close()
     soup = BeautifulSoup(body, 'html.parser')
     img_url_list = []
+    is_empty = True
     for i in soup.find_all('img'):
-        if 'imgstat' in i.get('src'):
-            img_url_list.append(i.get('src'))
-    tasks = [asyncio.ensure_future(preserve_image(url, ameblo_id,
-                                                  target_date, index))
-             for index, url in enumerate(img_url_list)]
-    await asyncio.wait(tasks)
+        if 'stat.ameba.jp' in i.get('src'):
+            img_url_list.append('http:' + i.get('src'))
+            is_empty = False
+    if is_empty is True:
+        pass
+    else:
+        tasks = [asyncio.ensure_future(preserve_image(url, ameblo_id,
+                                                      target_date, index))
+                 for index, url in enumerate(img_url_list)]
+        await asyncio.wait(tasks)
 
 
 async def preserve_image(url, ameblo_id, target_date, index):
